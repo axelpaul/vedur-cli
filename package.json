@@ -1,0 +1,19 @@
+{
+  "name": "vedur-cli",
+  "version": "0.1.0",
+  "description": "Agent-friendly Icelandic Met Office CLI",
+  "type": "module",
+  "bin": { "vedur": "./dist/index.js" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "dev": "bun src/index.ts",
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit",
+    "check": "bun run typecheck && bun run test"
+  },
+  "devDependencies": { "@types/bun": "latest", "typescript": "^5.7.0" },
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/axelpaul/vedur-cli.git" },
+  "keywords": ["weather", "iceland", "vedur", "imo", "cli", "agents"]
+}

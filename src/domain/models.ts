@@ -1,0 +1,3 @@
+export type Station = { id: number; name: string | null; abbreviation: string; type: string | null; active: boolean; latitude: number | null; longitude: number | null; elevationM: number | null; owner: string | null };
+export type Observation = { stationId: number; observedAt: string; aggregation: string; temperatureC?: number; windDirectionDeg?: number; windSpeedMps?: number; windGustMps?: number; pressureHPa?: number; relativeHumidityPct?: number; values: Record<string, number | string | null> };
+export type Quake = { id: string; occurredAt: string; updatedAt?: string; magnitude: number; depthKm: number; latitude: number; longitude: number; region?: string; type?: string; evaluationMode?: string };

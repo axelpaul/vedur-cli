@@ -1,0 +1,4 @@
+import { API_VERSIONS } from "../api/versions.ts";
+import { VedurError } from "../lib/error.ts";
+export function success(data: unknown, json: boolean, services: (keyof typeof API_VERSIONS)[]): void { const envelope = { source: "Icelandic Met Office", retrievedAt: new Date().toISOString(), apiVersions: Object.fromEntries(services.map(s => [s, API_VERSIONS[s]])), data }; if (json) console.log(JSON.stringify(envelope)); else console.log(JSON.stringify(envelope.data, null, 2)); }
+export function printError(error: unknown, json: boolean): number { const e = error instanceof VedurError ? error : new VedurError("UPSTREAM_SCHEMA_CHANGED", error instanceof Error ? error.message : "Unexpected error", 4); const payload = { error: { code: e.code, message: e.message, retryable: e.retryable, details: e.details } }; if (json) console.error(JSON.stringify(payload)); else console.error(`${e.code}: ${e.message}`); return e.exitCode; }
