@@ -9,6 +9,7 @@ bun install
 bun run dev stations find Reykjavík --active --json
 bun run dev now Reykjavík --json
 bun run dev now "Eyrarskógur 56, 301" --json
+bun run dev forecast --point 9054 --hours 24 --json
 bun run dev warnings --json
 bun run dev quakes --since 24h --min-magnitude 2 --json
 ```
@@ -18,6 +19,7 @@ Commands:
 - `stations find <query>` searches station metadata.
 - `now <place|address|station-id>`, `now --near lat,lon`, `now --station ID`, and `now --region ID` return latest 10-minute automatic observations. Places and addresses are geocoded within Iceland, then matched to a nearby active automatic station using both distance and elevation difference. The selected station and rationale are included in output; the address itself is never cached.
 - `stations nearest <place|address>` (or `--near lat,lon`) shows the station selection without making an observation call.
+- `forecast --point ID` returns the next 24 hours of Veður's modelled point forecast for a virtual/spot-forecast station (for example, Melahverfi is `9054`). Use `--hours N` for 1–240 hours. This is model output, not a live observation; Veður currently publishes it through `gottvedur.is`, outside the versioned `api.vedur.is` observations API.
 
 Address lookup defaults to Nominatim/OpenStreetMap (restricted to Iceland; attribution: © OpenStreetMap contributors). Set `VEDUR_GEOCODER_URL` to use another GeoJSON or ArcGIS-compatible address endpoint.
 - `observations latest --station ID|--region ID` supports `--aggregation 10min|hour|day|month|year` and `--parameters basic|all`.
@@ -46,4 +48,4 @@ bun run check
 bun run build
 ```
 
-The first release deliberately covers observations, warnings, and earthquakes. Forecasts and a raw endpoint escape hatch are non-goals until a concrete use case warrants them.
+The CLI deliberately avoids a raw endpoint escape hatch. Forecast-point support exists because it fills the concrete gap between a local model forecast and the nearest physical observation station.
