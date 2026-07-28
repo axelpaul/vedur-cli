@@ -8,6 +8,7 @@
 bun install
 bun run dev stations find Reykjavík --active --json
 bun run dev now Reykjavík --json
+bun run dev now "Eyrarskógur 56, 301" --json
 bun run dev warnings --json
 bun run dev quakes --since 24h --min-magnitude 2 --json
 ```
@@ -15,7 +16,10 @@ bun run dev quakes --since 24h --min-magnitude 2 --json
 Commands:
 
 - `stations find <query>` searches station metadata.
-- `now <place|station-id>`, `now --station ID`, and `now --region ID` return latest 10-minute automatic observations.
+- `now <place|address|station-id>`, `now --near lat,lon`, `now --station ID`, and `now --region ID` return latest 10-minute automatic observations. Places and addresses are geocoded within Iceland, then matched to a nearby active automatic station using both distance and elevation difference. The selected station and rationale are included in output; the address itself is never cached.
+- `stations nearest <place|address>` (or `--near lat,lon`) shows the station selection without making an observation call.
+
+Address lookup defaults to Nominatim/OpenStreetMap (restricted to Iceland; attribution: © OpenStreetMap contributors). Set `VEDUR_GEOCODER_URL` to use another GeoJSON or ArcGIS-compatible address endpoint.
 - `observations latest --station ID|--region ID` supports `--aggregation 10min|hour|day|month|year` and `--parameters basic|all`.
 - `warnings [--category name]` returns active CAP warnings.
 - `quakes` supports `--since`, `--until`, `--near lat,lon`, `--radius-km`, `--min-magnitude`, `--manual`, `--automatic`, and `--limit`.
