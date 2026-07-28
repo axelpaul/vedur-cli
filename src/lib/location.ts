@@ -3,7 +3,7 @@ import type { Station } from "../domain/models.ts";
 import { distanceKm } from "./geo.ts";
 import { fail } from "./error.ts";
 
-export type ResolvedLocation = { label: string; latitude: number; longitude: number; elevationM?: number; source: "coordinates" | "geocoder" };
+export type ResolvedLocation = { label: string; latitude: number; longitude: number; elevationM?: number; source: "coordinates" | "geocoder" | "saved" };
 export type SelectedStation = { station: Station; distanceKm: number; score: number; rationale: string[] };
 const DEFAULT_GEOCODER = "https://nominatim.openstreetmap.org/search";
 

@@ -10,6 +10,8 @@ bun run dev stations find Reykjavík --active --json
 bun run dev now Reykjavík --json
 bun run dev now "Eyrarskógur 56, 301" --json
 bun run dev forecast "Eyrarskógur 56, 301" --hours 24 --json
+bun run dev locations add cabin "Eyrarskógur 56, 301"
+bun run dev forecast cabin --json
 bun run dev warnings --json
 bun run dev quakes --since 24h --min-magnitude 2 --json
 ```
@@ -20,6 +22,7 @@ Commands:
 - `now <place|address|station-id>`, `now --near lat,lon`, `now --station ID`, and `now --region ID` return latest 10-minute automatic observations. Places and addresses are geocoded within Iceland, then matched to a nearby active automatic station using both distance and elevation difference. The selected station and rationale are included in output; the address itself is never cached.
 - `stations nearest <place|address>` (or `--near lat,lon`) shows the station selection without making an observation call.
 - `forecast <place|address>` (or `--near lat,lon`) resolves the location and selects the closest virtual/spot-forecast point from Veður's public forecast map catalogue. `forecast --point ID` selects an exact point (for example, Melahverfi is `9054`). Both return the next 24 hours of modelled data; use `--hours N` for 1–240 hours. This is model output, not a live observation; Veður currently publishes it through `gottvedur.is`, outside the versioned `api.vedur.is` observations API. The public point catalogue is cached for 24 hours.
+- `locations add <name> <place|address>` saves a local named location, including its resolved coordinates and preferred forecast point. `locations list` and `locations remove <name>` inspect and manage them. `now <name>` and `forecast <name>` then work without another geocoder lookup. Saved locations live only in `$XDG_CONFIG_HOME/vedur-cli/locations.json` (or `~/.config/vedur-cli/locations.json`); they are never sent anywhere except when a weather lookup requires their coordinates.
 
 Address lookup defaults to Nominatim/OpenStreetMap (restricted to Iceland; attribution: © OpenStreetMap contributors). Set `VEDUR_GEOCODER_URL` to use another GeoJSON or ArcGIS-compatible address endpoint.
 - `observations latest --station ID|--region ID` supports `--aggregation 10min|hour|day|month|year` and `--parameters basic|all`.
