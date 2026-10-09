@@ -29,6 +29,7 @@ Commands:
   vedur stations nearest <place|address> | --near lat,lon [--json]
   vedur observations latest --station <id>|--region <id> [--aggregation 10min|hour|day|month|year] [--parameters basic|all] [--json]
   vedur warnings [--category <name>] [--json]
+  vedur serve  # local MCP server over stdio
   vedur quakes [--since 24h] [--until ISO] [--near lat,lon] [--radius-km N] [--min-magnitude N] [--manual|--automatic] [--limit N] [--json]`); }
 async function resolve(value: string): Promise<number> { if (/^\d+$/.test(value)) return Number(value); const candidates = await stations(value, true); const exact = candidates.filter(s => s.type === "sj" && s.name?.localeCompare(value, "is", { sensitivity: "accent" }) === 0); if (exact.length === 1) return exact[0]!.id; if (candidates.length === 0) fail("STATION_NOT_FOUND", `No active station matching '${value}'.`); fail("AMBIGUOUS_STATION", `Could not resolve '${value}' to one automatic station.`, candidates); }
 async function nearestLocation(query?: string) {
@@ -42,6 +43,7 @@ async function nearestLocation(query?: string) {
 async function main(): Promise<void> {
   const p = pos(); const command = p[0];
   if (!command || has("help") || command === "help") return help();
+  if (command === "serve") { const { serve } = await import("./mcp/server.ts"); return serve(); }
   if (command === "stations" && p[1] === "find") { const query = p.slice(2).join(" "); if (!query) fail("MISSING_QUERY", "Provide a station search query."); const data = await stations(query, has("active")); return success(data.slice(0, Number(flag("limit") || 10)), json, ["weather"]); }
   if (command === "stations" && p[1] === "nearest") { const result = await nearestLocation(p.slice(2).join(" ")); const selected = result.selected; return success({ location: result.location, station: selected.station, distanceKm: Number(selected.distanceKm.toFixed(1)), rationale: selected.rationale }, json, ["weather"]); }
   if (command === "locations") { const action = p[1]; if (action === "list") return success(await listLocations(), json, []); if (action === "remove") { const name = p[2]; if (!name) fail("MISSING_LOCATION_NAME", "Provide the saved location name to remove."); await removeLocation(name); return success({ removed: name }, json, []); } if (action === "add") { const name = p[2], query = p.slice(3).join(" "); if (!name || !query) fail("MISSING_LOCATION", "Use: vedur locations add <name> <place|address>."); const location = await geocode(query); const explicitPoint = flag("point"); if (explicitPoint && !/^\d+$/.test(explicitPoint)) fail("INVALID_FORECAST_POINT", "--point must be a numeric Veður forecast-point ID."); const forecastPointId = explicitPoint ? Number(explicitPoint) : (await nearestForecastPoint(location.latitude, location.longitude)).station.id; return success(await addLocation(name, location, forecastPointId), json, []); } fail("UNKNOWN_COMMAND", "Use locations add, list, or remove."); }

@@ -16,6 +16,50 @@ bun run dev warnings --json
 bun run dev quakes --since 24h --min-magnitude 2 --json
 ```
 
+## MCP server (local stdio)
+
+The same CLI also serves four read-only MCP tools: `forecast`, `now`,
+`stations_find`, and `warnings`. The tools use the same API and location
+resolution code as the CLI. They never request credentials or change an account.
+
+Build a standalone executable and register its absolute path with your MCP
+client, passing `serve` as the argument:
+
+```sh
+bun install --frozen-lockfile
+bun run check
+bun run build:binary
+realpath dist/vedur
+```
+
+For example, a client that accepts JSON MCP configuration can use:
+
+```json
+{
+  "mcpServers": {
+    "vedur": {
+      "command": "/absolute/path/to/vedur",
+      "args": ["serve"]
+    }
+  }
+}
+```
+
+The path must be replaced with the actual absolute path. MCP uses stdout for
+the protocol, so do not redirect human-facing logs there. Upstream weather text
+is data, not instructions. This source-build path is the pilot. A
+checksum-verifying installer has been tested locally on Linux, but no release
+binaries or public catalogue entry have been published yet.
+
+The MCP server also offers `locations_list`. Local write tools `location_add`
+and `location_remove` appear only when launched with
+`VEDUR_MCP_ENABLE_WRITES=1`. They require the exact location name repeated in
+`confirmName`; adding will not overwrite an existing name unless `replace=true`.
+This is an accident guard, not a substitute for the MCP client obtaining the
+user's permission. A compiled-binary add/list/remove round trip passed using
+an isolated temporary configuration directory; no saved household locations
+were changed.
+
 Commands:
 
 - `stations find <query>` searches station metadata.
@@ -50,5 +94,13 @@ bun install
 bun run check
 bun run build
 ```
+
+For a local packaging smoke test, compile the binary (`bun run build:binary`),
+then run `sh scripts/package-local.sh v0.1.0 /tmp/vedur-release-test` and
+`sh scripts/install.sh --version v0.1.0 --base-url
+file:///tmp/vedur-release-test --dest /tmp/vedur-install-test`. The installer
+downloads a version-specific binary and SHA-256 file and checks the digest
+before moving the binary into the destination. The default URL expects matching
+tagged GitHub release assets; it will not work until such a release exists.
 
 The CLI deliberately avoids a raw endpoint escape hatch. Forecast-point support exists because it fills the concrete gap between a local model forecast and the nearest physical observation station.
