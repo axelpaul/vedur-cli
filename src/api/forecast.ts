@@ -1,3 +1,4 @@
+import { USER_AGENT } from "../version.ts";
 import { VedurError } from "../lib/error.ts";
 import { distanceKm } from "../lib/geo.ts";
 
@@ -35,7 +36,7 @@ export async function forecastPoint(pointId: number, hours = 24): Promise<Foreca
   url.searchParams.set("stationId", String(pointId));
   let response: Response;
   try {
-    response = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "vedur-cli/0.1.0" } });
+    response = await fetch(url, { headers: { Accept: "application/json", "User-Agent": USER_AGENT } });
   } catch {
     throw new VedurError("UPSTREAM_UNAVAILABLE", "Could not reach Veður's point-forecast feed.", 3, undefined, true);
   }
@@ -63,7 +64,12 @@ export async function forecastStations(): Promise<ForecastStation[]> {
   const url = new URL("/api/map/forecast/boundary", BASE);
   // Veður's map serves a progressively denser, public catalogue by zoom level.
   url.search = new URLSearchParams({ x1: "-25", x2: "-13", y1: "63", y2: "67.5", zoom: "13" }).toString();
-  const response = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "vedur-cli/0.1.0" } });
+  let response: Response;
+  try {
+    response = await fetch(url, { headers: { Accept: "application/json", "User-Agent": USER_AGENT } });
+  } catch {
+    throw new VedurError("UPSTREAM_UNAVAILABLE", "Could not reach Veður's forecast-station catalogue.", 3, undefined, true);
+  }
   if (!response.ok) throw new VedurError("UPSTREAM_HTTP_ERROR", `Veður's forecast-station catalogue returned HTTP ${response.status}.`, 3, { status: response.status }, response.status >= 500 || response.status === 429);
   const raw = await response.json() as { features?: unknown[] };
   if (!Array.isArray(raw.features)) throw new VedurError("UPSTREAM_SCHEMA", "Unexpected forecast-station catalogue payload.", 4);

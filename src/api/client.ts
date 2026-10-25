@@ -1,3 +1,4 @@
+import { USER_AGENT } from "../version.ts";
 import { VedurError } from "../lib/error.ts";
 import { type Service, versionFor } from "./versions.ts";
 
@@ -16,7 +17,7 @@ export async function getJson<T>(service: Service, path: string, query: Record<s
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15_000);
     try {
-      const response = await fetch(url, { signal: controller.signal, headers: { Accept: "application/json", "x-vi-api-version": versionFor(service), "User-Agent": "vedur-cli/0.1.0" } });
+      const response = await fetch(url, { signal: controller.signal, headers: { Accept: "application/json", "x-vi-api-version": versionFor(service), "User-Agent": USER_AGENT } });
       if (response.status === 204) return [] as T;
       if (response.ok) return await response.json() as T;
       const retryable = response.status === 408 || response.status === 429 || response.status >= 500;

@@ -1,3 +1,4 @@
+import { USER_AGENT } from "../version.ts";
 import { activeAutomaticStations } from "../api/weather.ts";
 import type { Station } from "../domain/models.ts";
 import { distanceKm } from "./geo.ts";
@@ -32,7 +33,7 @@ export async function geocode(query: string): Promise<ResolvedLocation> {
   } else url.searchParams.set("query", query);
   let payload: unknown;
   try {
-    const response = await fetch(url, { headers: { Accept: "application/geo+json, application/json", "User-Agent": "vedur-cli/0.1 (https://github.com/axelpaul/vedur-cli)" } });
+    const response = await fetch(url, { headers: { Accept: "application/geo+json, application/json", "User-Agent": USER_AGENT } });
     if (!response.ok) fail("LOCATION_NOT_FOUND", `Address geocoder returned HTTP ${response.status} for '${query}'.`);
     payload = await response.json();
   } catch (error) { if ((error as { code?: string }).code) throw error; fail("LOCATION_NOT_FOUND", `Could not resolve '${query}'. Use --near latitude,longitude or --station.`); }
