@@ -8,6 +8,6 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run check
-      - run: bun run build
+      - run: bun src/index.ts --version
       - run: bun run build:binary
       - run: bun run smoke:mcp

@@ -1,33 +1,42 @@
 {
   "name": "vedur-cli",
   "version": "0.1.0",
-  "description": "Agent-friendly Icelandic Met Office CLI",
+  "private": true,
+  "description": "Unofficial CLI and MCP server for Icelandic Met Office (Veður) weather, forecasts, warnings and earthquakes",
   "type": "module",
   "bin": {
-    "vedur": "./dist/index.js"
+    "vedur": "src/index.ts"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["src", "README.md", "LICENSE"],
   "scripts": {
     "dev": "bun src/index.ts",
     "build": "bun build ./src/index.ts --outdir ./dist --target bun",
     "build:binary": "bun build ./src/index.ts --compile --outfile ./dist/vedur",
     "smoke:mcp": "bun scripts/smoke-mcp.ts",
     "test": "bun test",
-    "typecheck": "bunx tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "check": "bun run typecheck && bun run test"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "typescript": "^5.7.0"
   },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.5"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  },
   "license": "MIT",
+  "author": "Axel Paul Gunnarsson",
+  "homepage": "https://github.com/axelpaul/vedur-cli#readme",
+  "bugs": {
+    "url": "https://github.com/axelpaul/vedur-cli/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/axelpaul/vedur-cli.git"
   },
-  "keywords": ["weather", "iceland", "vedur", "imo", "cli", "agents"],
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.32.1",
-    "zod": "^4.6.5"
-  }
+  "keywords": ["weather", "iceland", "vedur", "imo", "cli", "mcp", "agents"]
 }
