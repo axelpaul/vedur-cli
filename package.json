@@ -6,7 +6,11 @@
   "bin": {
     "vedur": "./dist/index.js"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "bun src/index.ts",
     "build": "bun build ./src/index.ts --outdir ./dist --target bun",
@@ -14,7 +18,8 @@
     "smoke:mcp": "bun scripts/smoke-mcp.ts",
     "test": "bun test",
     "typecheck": "bunx tsc --noEmit",
-    "check": "bun run typecheck && bun run test"
+    "check": "bun run typecheck && bun run test",
+    "verify:mcp": "bun scripts/verify-mcp.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -25,7 +30,14 @@
     "type": "git",
     "url": "git+https://github.com/axelpaul/vedur-cli.git"
   },
-  "keywords": ["weather", "iceland", "vedur", "imo", "cli", "agents"],
+  "keywords": [
+    "weather",
+    "iceland",
+    "vedur",
+    "imo",
+    "cli",
+    "agents"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
     "zod": "^4.6.5"

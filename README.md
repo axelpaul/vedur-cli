@@ -1,5 +1,7 @@
 # vedur-cli
 
+[MCP setup and client configuration](MCP.md)
+
 `vedur` is a small, agent-oriented CLI for selected public APIs from the Icelandic Met Office (Veðurstofa Íslands). It is intentionally not a generic HTTP proxy: it resolves stations, normalises the useful bits, and keeps a stable JSON envelope.
 
 ## Install and use
