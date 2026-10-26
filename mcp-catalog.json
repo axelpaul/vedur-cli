@@ -1,0 +1,105 @@
+{
+  "$schema": "https://mcp.axelpaul.is/catalog.schema.json",
+  "id": "vedur",
+  "repo": "axelpaul/vedur-cli",
+  "name": "Veður",
+  "service": "Icelandic Met Office (Veðurstofa Íslands)",
+  "serviceUrl": "https://www.vedur.is",
+  "tagline": "Weather forecasts, observations, warnings and earthquakes",
+  "description": "Get forecasts and the latest observations from the Icelandic Met Office for a place or address. You can also check weather warnings and recent earthquakes. No sign-in needed.",
+  "examples": [
+    "Will it rain in Akureyri this afternoon?",
+    "Are there any weather warnings for the south coast today?",
+    "Have there been any earthquakes above magnitude 2 in the past 24 hours?"
+  ],
+  "category": "Weather",
+  "auth": "none",
+  "binaries": true,
+  "tools": [
+    {
+      "name": "now",
+      "write": false,
+      "description": "Latest 10-minute observation near a place, address, saved location or coordinates, or for a station/region ID"
+    },
+    {
+      "name": "forecast",
+      "write": false,
+      "description": "Hourly spot forecast (1–240 h) for a place, address, saved location, coordinates or forecast-point ID"
+    },
+    {
+      "name": "observations_latest",
+      "write": false,
+      "description": "Latest observations for a station or region at 10min/hour/day/month/year aggregation"
+    },
+    {
+      "name": "stations_find",
+      "write": false,
+      "description": "Search weather stations by name"
+    },
+    {
+      "name": "stations_nearest",
+      "write": false,
+      "description": "Select the nearest active automatic weather station to a place or coordinates"
+    },
+    {
+      "name": "warnings",
+      "write": false,
+      "description": "Active CAP weather warnings (summaries)"
+    },
+    {
+      "name": "quakes",
+      "write": false,
+      "description": "Recent earthquakes with time, magnitude, area and review-mode filters"
+    },
+    {
+      "name": "locations_list",
+      "write": false,
+      "description": "List locally saved locations"
+    },
+    {
+      "name": "location_add",
+      "write": true,
+      "description": "Save a named location locally (requires confirmName)"
+    },
+    {
+      "name": "location_remove",
+      "write": true,
+      "description": "Remove a saved location (requires confirmName)"
+    }
+  ],
+  "commands": [
+    "vedur now <place>",
+    "vedur forecast <place> [--hours N]",
+    "vedur stations find <query>",
+    "vedur stations nearest <place>",
+    "vedur observations latest --station <id>",
+    "vedur warnings",
+    "vedur quakes [--since 24h] [--min-magnitude N]",
+    "vedur locations add|list|remove",
+    "vedur serve"
+  ],
+  "envVars": [
+    {
+      "name": "VEDUR_MCP_ENABLE_WRITES",
+      "description": "Set to 1 to expose the location_add/location_remove MCP tools"
+    },
+    {
+      "name": "VEDUR_GEOCODER_URL",
+      "description": "Alternative GeoJSON/ArcGIS address geocoder (default: Nominatim, Iceland only)"
+    },
+    {
+      "name": "VEDUR_API_VERSION_WEATHER / _CAP / _QUAKES",
+      "description": "Override pinned api.vedur.is API versions"
+    }
+  ],
+  "writesEnvVar": "VEDUR_MCP_ENABLE_WRITES",
+  "is": {
+    "tagline": "Veðurspár, veðurathuganir, viðvaranir og jarðskjálftar",
+    "description": "Sæktu veðurspá og nýjustu veðurathuganir frá Veðurstofu Íslands fyrir tiltekinn stað eða heimilisfang. Þú getur líka skoðað veðurviðvaranir og nýlega jarðskjálfta. Engin innskráning þarf til.",
+    "examples": [
+      "Verður rigning á Akureyri síðdegis?",
+      "Eru veðurviðvaranir á Suðurlandi í dag?",
+      "Hafa orðið jarðskjálftar yfir 2 að stærð síðasta sólarhringinn?"
+    ]
+  }
+}
