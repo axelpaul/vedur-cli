@@ -31,6 +31,7 @@ jobs:
         run: |
           cli="$(node -p 'Object.keys(require("./package.json").bin)[0]')"
           entry="$(node -p 'Object.values(require("./package.json").bin)[0]')"
+          entry="src/index.ts"
           mkdir -p release-assets
           for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64 windows-x64; do
             out="release-assets/${cli}-${target}"
