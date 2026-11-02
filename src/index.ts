@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import pkg from "../package.json";
 import { stations, latest } from "./api/weather.ts";
 import { warnings } from "./api/cap.ts";
 import { quakes } from "./api/quakes.ts";
@@ -42,6 +43,7 @@ async function nearestLocation(query?: string) {
 }
 async function main(): Promise<void> {
   const p = pos(); const command = p[0];
+  if (has("version") || command === "version") { console.log(json ? JSON.stringify({ version: pkg.version }) : `vedur ${pkg.version}`); return; }
   if (!command || has("help") || command === "help") return help();
   if (command === "serve") { const { serve } = await import("./mcp/server.ts"); return serve(); }
   if (command === "stations" && p[1] === "find") { const query = p.slice(2).join(" "); if (!query) fail("MISSING_QUERY", "Provide a station search query."); const data = await stations(query, has("active")); return success(data.slice(0, Number(flag("limit") || 10)), json, ["weather"]); }
